@@ -1,8 +1,13 @@
+body
+{
+    background-color: #EDE4B9 !important;
+}
+
 #title-bar-logo
 {
     font-size: 15pt;
     font-weight: bold;
-    padding-right: 5px;
+    padding-right: 10px;
     padding-top: 5px;
     line-height: 28px;
     float: right;
@@ -11,7 +16,7 @@
 #title-bar
 {
     font-size: 15pt;
-    padding-left: 5px;
+    padding-left: 10px;
     padding-top: 5px;
     line-height: 28px;
     float: left;
@@ -26,8 +31,9 @@
 .boxy
 {
     border-radius: 5px;
-    background-color: #ccc;
-    padding: 10px;
+    background-color: #CDC1C5;
+    border: 1px solid #BDB1B5;
+    padding: 5px;
     margin-bottom: 5px;
     height: 95%;
 }

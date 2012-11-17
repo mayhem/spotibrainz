@@ -110,7 +110,7 @@ function wikipedia(pageUrl)
     if (pageUrl) {
         urlBase = pageUrl.replace(/(http:\/\/[^.]+.wikipedia.org)\/.*/, "$1");
         urlPageTitle = pageUrl.replace(/http:\/\/[^.]+.wikipedia.org\/wiki\/(.*)/, "$1");
-        var link = $('<small><a href="' + pageUrl + '">' + urlPageTitle + '</a></small>');
+        var link = $('<small><a href="' + pageUrl + '">' + decodeURIComponent(urlPageTitle) + '</a></small>');
         $('#wp-header').html(link).prepend('Wikipedia ');
         url = urlBase + "/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + urlPageTitle
         $.ajax({url : url, success : wikipedia_callback, dataType: 'json'});
