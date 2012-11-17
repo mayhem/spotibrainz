@@ -264,10 +264,16 @@ function extractWikipediaPage()
 function getMBData()
 {
     var trackData = models.player.track.data;
+
     if (MB.mbData) { MB.mbData.loaded = false; }
+    var query = 'recording:"' + trackData.name + '" artist:"' + trackData.album.artist.name + '" release:"' + trackData.album.name + '" date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration; 
+    if (trackData.album.numTracks > 0) {
+        query += ' tracksrelease:' + trackData.album.numTracks;
+    }
+
     $.ajax({url: 'http://musicbrainz.org/ws/2/recording', 
             data: {fmt:'xml', 
-                   query: 'recording:"' + trackData.name + '" artist:"' + trackData.album.artist.name + '" release:"' + trackData.album.name + '" date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration + ' tracksrelease:' + trackData.album.numTracks}, 
+                   query: query}, 
             success: function(data) { 
                     MB.mbDataOld = MB.mbData; 
 		    var recording = $(data).find('recording-list').children('recording').filter(function() { return $(this).attr('ext:score') > 90 }); 
