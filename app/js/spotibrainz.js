@@ -127,8 +127,11 @@ function getMBData()
 		    var recording = $(data).find('recording-list').children('recording').filter(function() { return $(this).attr('ext:score') > 90 }); 
                     MB.mbData = {};
 		    MB.mbData.recordingId = recording.attr('id'); 
+		    MB.mbData.recordingName = recording.find('title').first().text(); 
 		    MB.mbData.releaseId = recording.find('release').attr('id');
+                    MB.mbData.releaseName = recording.find('release').find('title').first().text();
 		    MB.mbData.artistId = recording.find('artist').attr('id');
+		    MB.mbData.artistName = recording.find('artist').find('name').first().text();
                     MB.mbData.loaded = true;
             }, 
             dataType: 'xml'});
