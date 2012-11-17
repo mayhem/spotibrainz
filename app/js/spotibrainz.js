@@ -52,6 +52,32 @@ function songkick_callback(data)
     }
 }
 
+function twitter(username)
+{
+    if (username) {
+        url = 'http://api.twitter.com/1/statuses/user_timeline.json?exclude_replies=true&count=3&screen_name=' + username;
+        $.ajax({url : url, success : twitter_callback });
+    } else {
+        $('#twitter').html('No twitter feed. Bollocks!');
+    }
+}
+
+function twitter_callback(data)
+{
+    if (data[0]) {
+        var link = $('<small><a href="http://twitter.com/' + data[0].user.screen_name + '">@' + data[0].user.screen_name + '</a></small>');
+        $('#twitter-header').html(link).prepend('Tweets ');
+        var rendered = $('<ul></ul>');
+        $.each(data, function(idx, value) {
+           rendered.append('<li>' + value.text + '</li>') 
+        });
+        $('#twitter').html(rendered);
+    } else {
+        $('#twitter').html('No tweets. Quite unfortunate.');
+    }
+
+}
+
 function clearIfSpotifyIDChanged()
 {
     var trackData = models.player.track.data;
@@ -73,6 +99,8 @@ function clearIfSpotifyIDChanged()
 function clearArtist()
 {
     $("#songkick").html("");
+    $("#twitter").html("");
+    $("#twitter-header").html("Tweets");
 }
 
 function clearTrack() {}
@@ -102,18 +130,31 @@ function changedArtist()
     clearArtist();
     songkick(MB.mbData.artistId);
 
-    //getArtistRels();
-    //setTimeout(afterArtistRels, 50);
+    getArtistRels();
+    setTimeout(afterArtistRels, 50);
 }
 
-//function afterArtistRels() 
-//{
-//    if (MB.mbData.artistRelsLoaded) {
-        //console.log(MB.mbData.artistRels);
-//    } else {
-//        setTimeout(afterArtistRels, 50);
-//    }
-//}
+function afterArtistRels() 
+{
+    if (MB.mbData.artistRelsLoaded) {
+        twitter(extractTwitterUsername());
+    } else {
+        setTimeout(afterArtistRels, 50);
+    }
+}
+
+function extractTwitterUsername()
+{
+    var username;
+    var candidates = MB.mbData.artistRels.find('relation-list[target-type="url"]').find('relation[type="microblog"]').find('target');
+    candidates.each(function() {
+        if ($(this).text().match(/twitter.com/)) {
+            username = $(this).text();
+            username = username.replace(/http:\/\/twitter.com\//, "");
+        }
+    });
+    return username;
+}
 
 function getMBData()
 {
