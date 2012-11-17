@@ -32,6 +32,11 @@ function resize_window()
     $("#bottom-row").css("height", row_height);
 }
 
+function set_title(title)
+{
+    $("#title-bar").html(title);
+}
+
 function songkick(mbid)
 {
     url = "http://api.songkick.com/api/3.0/artists/mbid:" + mbid + "/calendar.json?apikey=hackday";
@@ -55,6 +60,8 @@ function songkick_callback(data)
 function clearIfSpotifyIDChanged()
 {
     var trackData = models.player.track.data;
+
+    set_title("");
     if (alwaysChange || !MB.prevTrack || MB.prevTrack.uri != trackData.uri) {
         console.log("Track has changed to " + trackData.uri);
         clearTrack();
@@ -100,6 +107,7 @@ function changedArtist()
 {
     console.log("Artist has changed to " + MB.mbData.artistId);
     clearArtist();
+    set_title(MB.mbData.artistName + ": " + MB.mbData.recordingName);
     songkick(MB.mbData.artistId);
 
     //getArtistRels();
