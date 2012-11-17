@@ -12,6 +12,19 @@ function init()
               eventchange();
 	  }
     });
+
+    $(window).resize(resize_window);
+}
+
+function resize_window()
+{
+    height = $(window).height();
+    title = $("#title-bar").height();
+    row_height = Math.floor((height - title) / 2);
+
+    $("#top-row").css("height", row_height);
+    $("#bottom-row").css("height", row_height);
+    console.log(row_height);
 }
 
 function eventchange()
