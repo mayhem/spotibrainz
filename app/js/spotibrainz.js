@@ -134,7 +134,6 @@ function commas(x) {
 
 function musicmetric_callback(data)
 {
-    console.log(data);
     if (data && data.response) {
         html = '<div class="boxy-heading">Fans:</div><table>';
         if (data.response.fans.facebook)
@@ -204,6 +203,7 @@ function afterGetData() {
             changedArtist();
         }
         if (alwaysChange || !MB.mbDataOld || MB.mbDataOld.recordingId != MB.mbData.recordingId) {
+            console.log("Recording has changed to " + MB.mbData.recordingId);
             musixmatch(MB.mbData.recordingId);
         }
     } else {
