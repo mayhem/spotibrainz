@@ -15,6 +15,7 @@
         "RequiredPermissions": [
                 "http://musicbrainz.org",
                 "http://api.songkick.com",
+                "http://api.musixmatch.com",
                 "http://api.twitter.com",
                 "http://en.wikipedia.org"
         ]

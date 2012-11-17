@@ -57,6 +57,27 @@ function songkick_callback(data)
     }
 }
 
+function musixmatch(mbid)
+{
+    url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_mbid=" + mbid + "&apikey=989c3cfacabf2ed3254ed055544cacc9";
+    $.ajax({url : url, success : musixmatch_callback, dataType : "json" });
+}
+
+function musixmatch_callback(data)
+{
+    if (data && data.message.body.lyrics && data.message.body.lyrics.lyrics_body != '')
+    {
+        text = data.message.body.lyrics.lyrics_body;
+        text = text.replace(/\n/g, "<br/>");
+        text = text.replace("\r", "");
+        text += "<br/><br/>" + data.message.body.lyrics.lyrics_copyright + " ";
+        text += '<img src="' + data.message.body.lyrics.pixel_tracking_url + '">';
+        $("#musixmatch").html(text);
+    }
+    else
+        $("#musixmatch").html("No lyrics available");
+}
+
 function twitter(username)
 {
     if (username) {
@@ -80,7 +101,6 @@ function twitter_callback(data)
     } else {
         $('#twitter').html('No tweets. Quite unfortunate.');
     }
-
 }
 
 function wikipedia(pageUrl)
@@ -130,7 +150,10 @@ function clearArtist()
     $("#wp-header").html("Wikipedia");
 }
 
-function clearTrack() {}
+function clearTrack()
+{
+    $("#musixmatch").html("");
+}
 
 function clearAlbum() {}
 
@@ -157,6 +180,7 @@ function changedArtist()
     clearArtist();
     set_title(MB.mbData.artistName + ": " + MB.mbData.recordingName);
     songkick(MB.mbData.artistId);
+    musixmatch(MB.mbData.recordingId);
 
     getArtistRels();
     setTimeout(afterArtistRels, 50);
