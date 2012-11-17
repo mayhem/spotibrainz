@@ -11,7 +11,7 @@ function init()
 
     models.player.observe(models.EVENT.CHANGE, function(event) {
           if (event.data.curtrack == true){
-              eventchange();
+              eventChange();
 	  }
     });
 
@@ -41,19 +41,22 @@ function songkick_callback(data)
     $("#songkick").text(data.resultsPage.results.event[0].displayName);
 }
 
-function eventchange()
+function eventChange()
 {
-    MB.mbData = getMBData();
-    setTimeout(aftereventchange, 50);
+    getMBData();
+    setTimeout(afterGetData, 50);
 }
 
-function aftereventchange() {
-    if (MB.mbData.loaded) {
-        songkick(MB.mbData.artistId);
-        getArtistRels();
-        setTimeout(afterArtistRels, 50);
+function afterGetData() {
+    if (MB.mbData && MB.mbData.loaded) {
+        if (MB.mbDataOld && MB.mbDataOld.artistId != MB.mbData.artistId) {
+            songkick(MB.mbData.artistId);
+
+            getArtistRels();
+            setTimeout(afterArtistRels, 50);
+        } else { console.log('artist unchanged'); }
     } else {
-        setTimeout(aftereventchange, 50);
+        setTimeout(afterGetData, 50);
     }
 }
 
@@ -69,19 +72,19 @@ function afterArtistRels()
 function getMBData()
 {
     var trackData = models.player.track.data;
-    var mbData = {};
     $.ajax({url: 'http://musicbrainz.org/ws/2/recording', 
             data: {fmt:'xml', 
                    query: 'recording:' + trackData.name + ' artist:' + trackData.album.artist.name + ' release:' + trackData.album.name + ' date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration + ' tracksrelease:' + trackData.album.numTracks}, 
             success: function(data) { 
+                    MB.mbDataOld = MB.mbData; 
 		    var recording = $(data).find('recording-list').children('recording').filter(function() { return $(this).attr('ext:score') > 90 }); 
-		    mbData.recordingId = recording.attr('id'); 
-		    mbData.releaseId = recording.find('release').attr('id');
-		    mbData.artistId = recording.find('artist').attr('id');
-                    mbData.loaded = true;
+                    MB.mbData = {};
+		    MB.mbData.recordingId = recording.attr('id'); 
+		    MB.mbData.releaseId = recording.find('release').attr('id');
+		    MB.mbData.artistId = recording.find('artist').attr('id');
+                    MB.mbData.loaded = true;
             }, 
             dataType: 'xml'});
-    return mbData;
 }
 
 function getArtistRels()
