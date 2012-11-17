@@ -3,8 +3,8 @@ var models, views;
 
 var MB = {};
 
-//var alwaysChange = false;
-var alwaysChange = true;
+var alwaysChange = false;
+//var alwaysChange = true;
 
 exports.init = init;
 function init() 
@@ -31,7 +31,7 @@ function resize_window()
 
     $("#top-row").css("height", row_height);
     $("#bottom-row").css("height", row_height);
-    $('.boxy-content').css("height", row_height - 90);
+    $('.boxy-content').css("height", row_height - 97);
 }
 
 function set_title(title)
@@ -170,6 +170,9 @@ function afterGetData() {
         if (alwaysChange || !MB.mbDataOld || MB.mbDataOld.artistId != MB.mbData.artistId) {
             changedArtist();
         }
+        if (alwaysChange || !MB.mbDataOld || MB.mbDataOld.recordingId != MB.mbData.recordingId) {
+            musixmatch(MB.mbData.recordingId);
+        }
     } else {
         setTimeout(afterGetData, 50);
     }
@@ -179,9 +182,8 @@ function changedArtist()
 {
     console.log("Artist has changed to " + MB.mbData.artistId);
     clearArtist();
-    set_title(MB.mbData.artistName + ": " + MB.mbData.recordingName);
+    set_title('<a href="http://musicbrainz.org/artist/' + MB.mbData.artistId + '">' + MB.mbData.artistName + '</a>: <a href="http://musicbrainz.org/recording/' + MB.mbData.recordingId +  '">' + MB.mbData.recordingName + '</a>');
     songkick(MB.mbData.artistId);
-    musixmatch(MB.mbData.recordingId);
 
     getArtistRels();
     setTimeout(afterArtistRels, 50);
