@@ -110,10 +110,12 @@ function wikipedia(pageUrl)
     if (pageUrl) {
         urlBase = pageUrl.replace(/(http:\/\/[^.]+.wikipedia.org)\/.*/, "$1");
         urlPageTitle = pageUrl.replace(/http:\/\/[^.]+.wikipedia.org\/wiki\/(.*)/, "$1");
-        var link = $('<small><a href="' + pageUrl + '">' + decodeURIComponent(urlPageTitle) + '</a></small>');
+        var link = $('<small><a href="' + pageUrl + '">' + decodeURIComponent(urlPageTitle.replace(/_/g, ' ')) + '</a></small>');
         $('#wp-header').html(link).prepend('Wikipedia ');
         url = urlBase + "/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + urlPageTitle
         $.ajax({url : url, success : wikipedia_callback, dataType: 'json'});
+    } else {
+        $('#wikipedia').html('No wikipedia page. Shucks.');
     }
 }
 
@@ -139,7 +141,6 @@ function commas(x) {
 
 function musicmetric_pop_callback(data)
 {
-    console.log(data);
     if (data && data.response) {
         html = '<div class="boxy-heading">Fans:</div><table>';
         if (data.response.fans.facebook)
@@ -179,6 +180,7 @@ function musicmetric_geo_callback(data)
 
 function clearIfSpotifyIDChanged()
 {
+    $(window).trigger('resize');
     var trackData = models.player.track.data;
 
     set_title("");
@@ -228,6 +230,7 @@ function afterGetData() {
             changedArtist();
         }
         if (alwaysChange || !MB.mbDataOld || MB.mbDataOld.recordingId != MB.mbData.recordingId) {
+            console.log("Recording has changed to " + MB.mbData.recordingId);
             musixmatch(MB.mbData.recordingId);
         }
     } else {
@@ -285,10 +288,16 @@ function extractWikipediaPage()
 function getMBData()
 {
     var trackData = models.player.track.data;
+
     if (MB.mbData) { MB.mbData.loaded = false; }
+    var query = 'recording:"' + trackData.name + '" artist:"' + trackData.album.artist.name + '" release:"' + trackData.album.name + '" date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration; 
+    if (trackData.album.numTracks > 0) {
+        query += ' tracksrelease:' + trackData.album.numTracks;
+    }
+
     $.ajax({url: 'http://musicbrainz.org/ws/2/recording', 
             data: {fmt:'xml', 
-                   query: 'recording:"' + trackData.name + '" artist:"' + trackData.album.artist.name + '" release:"' + trackData.album.name + '" date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration + ' tracksrelease:' + trackData.album.numTracks}, 
+                   query: query}, 
             success: function(data) { 
                     MB.mbDataOld = MB.mbData; 
 		    var recording = $(data).find('recording-list').children('recording').filter(function() { return $(this).attr('ext:score') > 90 }); 

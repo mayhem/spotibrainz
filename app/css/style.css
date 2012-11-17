@@ -1,6 +1,7 @@
 body
 {
     background-color: #EDE4B9 !important;
+    font-family: "Lucida Grande" !important;
 }
 
 #title-bar-logo
@@ -26,6 +27,8 @@ body
 {
     color: #333;
     text-decoration: none;
+    background-image: none;
+    padding-right: 0px;
 }
 
 #title-bar a:hover
@@ -37,6 +40,15 @@ body
 {
     width: 97%;
     margin: auto;
+}
+
+a
+{
+    padding-right: 10px;
+    background-image: url('../img/external_link-tiny.png');
+    background-repeat: no-repeat;
+    background-position: center right;
+    display: inline-block;
 }
 
 .boxy
@@ -82,22 +94,13 @@ body
     border-collapse: separate;
 }
 
+<<<<<<< HEAD
 #musicmetric-geo ul
 {
     list-style-type: none;
 }
 
-#songkick
-{
-    overflow-y: hidden;
-}
-
-#twitter
-{
-    overflow-y: hidden;
-}
-
-#musicmetric
+#songkick, #twitter, #musicmetric, #youtube
 {
     overflow-y: hidden;
 }
