@@ -16,8 +16,7 @@ function init()
 
 function change_event_received()
 {
-
-
+    songkick();
 }
 
 function resize_window()
@@ -28,5 +27,11 @@ function resize_window()
 
     $("#top-row").css("height", row_height);
     $("#bottom-row").css("height", row_height);
-    console.log(row_height);
+}
+
+function songkick()
+{
+    mbid = "8f6bd1e4-fbe1-4f50-aa9b-94c450ec0f11";
+    url = "http://api.songkick.com/api/3.0/artists/mbid:" + mbid + "/calendar.json?apikey=musichackday";
+    console.log(url);
 }
