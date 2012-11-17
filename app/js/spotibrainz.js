@@ -37,12 +37,22 @@ function songkick(mbid)
 
 function songkick_callback(data)
 {
-    console.log(data.resultsPage.results.event[0].displayName);
-    $("#songkick").text(data.resultsPage.results.event[0].displayName);
+    if (data.resultsPage.totalEntries) {
+        $("#songkick").html(data.resultsPage.results.event[0].displayName);
+    } else {
+        console.log("no data!");
+        $("#songkick").html("No upcoming concerts. Fuss!");
+    }
+}
+
+function clear()
+{
+    $("#songkick").html("");
 }
 
 function eventChange()
 {
+    clear();
     getMBData();
     setTimeout(afterGetData, 50);
 }

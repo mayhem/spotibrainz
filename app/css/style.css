@@ -6,3 +6,10 @@
     margin-bottom: 5px;
     height: 99%;
 };
+
+#songkick
+{
+    background-color: red;
+    background-image: url('img/songkick.png');
+    background-repeat: no-repeat;
+};
