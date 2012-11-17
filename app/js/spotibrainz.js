@@ -51,8 +51,13 @@ function getMBData()
     var mbData = {};
     $.ajax({url: 'http://musicbrainz.org/ws/2/recording', 
             data: {fmt:'xml', 
-                   query: 'recording:' + trackData.name + ' artist:' + trackData.album.artist.name + ' release:' + trackData.album.name + ' date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration}, 
-            success: function(data) { mbData.recordingId = $(data).find('recording-list').children('recording').filter(function() { return $(this).attr('ext:score') == 100 }).attr('id'); }, 
+                   query: 'recording:' + trackData.name + ' artist:' + trackData.album.artist.name + ' release:' + trackData.album.name + ' date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration + ' tracksrelease:' + trackData.album.numTracks}, 
+            success: function(data) { 
+		    var recording = $(data).find('recording-list').children('recording').filter(function() { return $(this).attr('ext:score') > 90 }); 
+		    mbData.recordingId = recording.attr('id'); 
+		    mbData.releaseId = recording.find('release').attr('id');
+		    mbData.artistId = recording.find('artist').attr('id');
+            }, 
             dataType: 'xml'});
     return mbData;
 }
