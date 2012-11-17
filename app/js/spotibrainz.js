@@ -16,6 +16,7 @@ function init()
     });
 
     $(window).resize(resize_window);
+    $(window).trigger('resize');
 }
 
 function resize_window()
