@@ -114,6 +114,8 @@ function wikipedia(pageUrl)
         $('#wp-header').html(link).prepend('Wikipedia ');
         url = urlBase + "/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + urlPageTitle
         $.ajax({url : url, success : wikipedia_callback, dataType: 'json'});
+    } else {
+        $('#wikipedia').html('No wikipedia page. Shucks.');
     }
 }
 
