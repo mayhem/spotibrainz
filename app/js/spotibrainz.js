@@ -30,6 +30,7 @@ function resize_window()
 
     $("#top-row").css("height", row_height);
     $("#bottom-row").css("height", row_height);
+    $('.boxy-content').css("height", row_height - 90);
 }
 
 function set_title(title)
@@ -71,7 +72,7 @@ function musixmatch_callback(data)
         text = text.replace(/\n/g, "<br/>");
         text = text.replace("\r", "");
         text += "<br/><br/>" + data.message.body.lyrics.lyrics_copyright + " ";
-        text += '<img src="' + data.message.body.lyrics.pixel_tracking_url + '">';
+        text += '<img style="display:none" src="' + data.message.body.lyrics.pixel_tracking_url + '">';
         $("#musixmatch").html(text);
     }
     else
@@ -117,7 +118,6 @@ function wikipedia(pageUrl)
 
 function wikipedia_callback(data)
 {
-     console.log(data);
      $('#wikipedia').html(data.query.pages[Object.keys(data.query.pages)[0]].extract);
 }
 
@@ -229,6 +229,7 @@ function getMBData()
             data: {fmt:'xml', 
                    query: 'recording:"' + trackData.name + '" artist:"' + trackData.album.artist.name + '" release:"' + trackData.album.name + '" date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration + ' tracksrelease:' + trackData.album.numTracks}, 
             success: function(data) { 
+                    console.log(data);
                     MB.mbDataOld = MB.mbData; 
 		    var recording = $(data).find('recording-list').children('recording').filter(function() { return $(this).attr('ext:score') > 90 }); 
                     MB.mbData = {};
