@@ -14,6 +14,7 @@
 	],
         "RequiredPermissions": [
                 "http://musicbrainz.org",
-                "http://api.songkick.com"
+                "http://api.songkick.com",
+                "http://api.musixmatch.com"
         ]
 }
