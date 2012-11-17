@@ -3,6 +3,8 @@ var models, views;
 
 var MB = {};
 
+var alwaysChange = false;
+
 exports.init = init;
 function init() 
 {
@@ -17,6 +19,7 @@ function init()
 
     $(window).resize(resize_window);
     $(window).trigger('resize');
+    eventChange();
 }
 
 function resize_window()
@@ -49,46 +52,75 @@ function songkick_callback(data)
     }
 }
 
-function clear()
+function clearIfSpotifyIDChanged()
+{
+    var trackData = models.player.track.data;
+    if (alwaysChange || !MB.prevTrack || MB.prevTrack.uri != trackData.uri) {
+        console.log("Track has changed to " + trackData.uri);
+        clearTrack();
+    }
+    if (alwaysChange || !MB.prevTrack || MB.prevTrack.album.uri != trackData.album.uri) {
+        console.log("Album has changed to " + trackData.album.uri);
+        clearAlbum();
+    }
+    if (alwaysChange || !MB.prevTrack || MB.prevTrack.album.artist.uri != trackData.album.artist.uri) {
+        console.log("Artist has changed to " + trackData.album.artist.uri);
+        clearArtist();
+    }
+    MB.prevTrack = trackData;
+}
+
+function clearArtist()
 {
     $("#songkick").html("");
 }
 
+function clearTrack() {}
+
+function clearAlbum() {}
+
 function eventChange()
 {
-    clear();
+    clearIfSpotifyIDChanged();
     getMBData();
     setTimeout(afterGetData, 50);
 }
 
 function afterGetData() {
     if (MB.mbData && MB.mbData.loaded) {
-        if (MB.mbDataOld && MB.mbDataOld.artistId != MB.mbData.artistId) {
-            songkick(MB.mbData.artistId);
-
-            getArtistRels();
-            setTimeout(afterArtistRels, 50);
-        } else { console.log('artist unchanged'); }
+        if (alwaysChange || !MB.mbDataOld || MB.mbDataOld.artistId != MB.mbData.artistId) {
+            changedArtist();
+        }
     } else {
         setTimeout(afterGetData, 50);
     }
 }
 
-function afterArtistRels() 
+function changedArtist()
 {
-    if (MB.mbData.artistRelsLoaded) {
-        console.log(MB.mbData.artistRels);
-    } else {
-        setTimeout(afterArtistRels, 50);
-    }
+    console.log("Artist has changed to " + MB.mbData.artistId);
+    clearArtist();
+    songkick(MB.mbData.artistId);
+
+    //getArtistRels();
+    //setTimeout(afterArtistRels, 50);
 }
+
+//function afterArtistRels() 
+//{
+//    if (MB.mbData.artistRelsLoaded) {
+        //console.log(MB.mbData.artistRels);
+//    } else {
+//        setTimeout(afterArtistRels, 50);
+//    }
+//}
 
 function getMBData()
 {
     var trackData = models.player.track.data;
     $.ajax({url: 'http://musicbrainz.org/ws/2/recording', 
             data: {fmt:'xml', 
-                   query: 'recording:' + trackData.name + ' artist:' + trackData.album.artist.name + ' release:' + trackData.album.name + ' date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration + ' tracksrelease:' + trackData.album.numTracks}, 
+                   query: 'recording:"' + trackData.name + '" artist:"' + trackData.album.artist.name + '" release:"' + trackData.album.name + '" date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration + ' tracksrelease:' + trackData.album.numTracks}, 
             success: function(data) { 
                     MB.mbDataOld = MB.mbData; 
 		    var recording = $(data).find('recording-list').children('recording').filter(function() { return $(this).attr('ext:score') > 90 }); 
