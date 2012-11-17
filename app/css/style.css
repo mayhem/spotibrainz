@@ -42,6 +42,18 @@
     float: right;
 }
 
+.boxy-heading
+{
+    font-weight:   bold;
+}
+
+#musicmetric table
+{
+    margin-left:    10px;
+    border-spacing: 10px 0px;
+    border-collapse: separate;
+}
+
 #songkick
 {
 }

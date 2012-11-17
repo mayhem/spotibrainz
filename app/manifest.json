@@ -17,6 +17,7 @@
                 "http://api.songkick.com",
                 "http://api.musixmatch.com",
                 "http://api.twitter.com",
-                "http://en.wikipedia.org"
+                "http://en.wikipedia.org",
+                "http://api.semetric.com"
         ]
 }

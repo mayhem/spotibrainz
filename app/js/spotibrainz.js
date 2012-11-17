@@ -117,8 +117,39 @@ function wikipedia(pageUrl)
 
 function wikipedia_callback(data)
 {
-     console.log(data);
      $('#wikipedia').html(data.query.pages[Object.keys(data.query.pages)[0]].extract);
+}
+
+function musicmetric(mbid)
+{
+    url = "http://api.semetric.com/artist/musicbrainz:" + mbid + "/kpi?token=6f20a9a3dd4e49bba150ac59ef021b31";
+    $.ajax({url : url, success : musicmetric_callback, dataType : 'json' });
+}
+
+function commas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function musicmetric_callback(data)
+{
+    console.log(data);
+    if (data && data.response) {
+        html = '<div class="boxy-heading">Fans:</div><table>';
+        if (data.response.fans.facebook)
+            html += "<tr><td>Facebook</td><td>" + commas(data.response.fans.facebook.total) + "</td></tr>";
+        if (data.response.fans.soundcloud)
+            html += "<tr><td>Soundcloud</td><td>" + commas(data.response.fans.soundcloud.total) + "</td></tr>";
+        if (data.response.fans.twitter)
+            html += "<tr><td>Twitter</td><td>" + commas(data.response.fans.twitter.total) + "</td></tr>";
+        if (data.response.fans.youtube)
+            html += "<tr><td>YouTube</td><td>" + commas(data.response.fans.youtube.total) + "</td></tr>";
+        if (data.response.fans.lastfm)
+            html += "<tr><td>Last.fm</td><td>" + commas(data.response.fans.lastfm.total) + "</td></tr>";
+        html += "</table></div>";
+        $("#musicmetric").html(html);
+    } else {
+        $("#musicmetric").html("No metrics available. Ay caramba!");
+    }
 }
 
 function clearIfSpotifyIDChanged()
@@ -148,6 +179,7 @@ function clearArtist()
     $("#twitter-header").html("Tweets");
     $("#wikipedia").html("");
     $("#wp-header").html("Wikipedia");
+    $("#musicmetric").html("");
 }
 
 function clearTrack()
@@ -181,6 +213,7 @@ function changedArtist()
     set_title(MB.mbData.artistName + ": " + MB.mbData.recordingName);
     songkick(MB.mbData.artistId);
     musixmatch(MB.mbData.recordingId);
+    musicmetric(MB.mbData.artistId);
 
     getArtistRels();
     setTimeout(afterArtistRels, 50);
