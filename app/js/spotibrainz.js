@@ -58,6 +58,7 @@ function getMBData()
 		    mbData.releaseId = recording.find('release').attr('id');
 		    mbData.artistId = recording.find('artist').attr('id');
             }, 
-            dataType: 'xml'});
+            dataType: 'xml',
+            async: false});
     return mbData;
 }
