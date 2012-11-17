@@ -3,6 +3,7 @@ var models, views;
 
 var MB = {};
 
+//var alwaysChange = false;
 var alwaysChange = true;
 
 exports.init = init;
@@ -229,7 +230,6 @@ function getMBData()
             data: {fmt:'xml', 
                    query: 'recording:"' + trackData.name + '" artist:"' + trackData.album.artist.name + '" release:"' + trackData.album.name + '" date:' + trackData.album.year + ' number:' + trackData.trackNumber + ' dur:' + trackData.duration + ' tracksrelease:' + trackData.album.numTracks}, 
             success: function(data) { 
-                    console.log(data);
                     MB.mbDataOld = MB.mbData; 
 		    var recording = $(data).find('recording-list').children('recording').filter(function() { return $(this).attr('ext:score') > 90 }); 
                     MB.mbData = {};
