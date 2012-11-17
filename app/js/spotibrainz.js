@@ -1,6 +1,8 @@
 var sp = getSpotifyApi(1);
 var models, views;
 
+var MB = {};
+
 exports.init = init;
 function init() 
 {
@@ -40,9 +42,16 @@ function songkick_callback(data)
 
 function eventchange()
 {
-    var mbData = getMBData();
+    MB.mbData = getMBData();
+    setTimeout(aftereventchange, 50);
+}
 
-    songkick(mbData.artistId);
+function aftereventchange() {
+    if (MB.mbData.loaded) {
+        songkick(MB.mbData.artistId);
+    } else {
+        setTimeout(aftereventchange, 50);
+    }
 }
 
 function getMBData()
@@ -57,8 +66,8 @@ function getMBData()
 		    mbData.recordingId = recording.attr('id'); 
 		    mbData.releaseId = recording.find('release').attr('id');
 		    mbData.artistId = recording.find('artist').attr('id');
+                    mbData.loaded = true;
             }, 
-            dataType: 'xml',
-            async: false});
+            dataType: 'xml'});
     return mbData;
 }
