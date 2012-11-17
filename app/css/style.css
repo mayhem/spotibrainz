@@ -27,6 +27,8 @@ body
 {
     color: #333;
     text-decoration: none;
+    background-image: none;
+    padding-right: 0px;
 }
 
 #title-bar a:hover
@@ -38,6 +40,15 @@ body
 {
     width: 97%;
     margin: auto;
+}
+
+a
+{
+    padding-right: 10px;
+    background-image: url('../img/external_link-tiny.png');
+    background-repeat: no-repeat;
+    background-position: center right;
+    display: inline-block;
 }
 
 .boxy
