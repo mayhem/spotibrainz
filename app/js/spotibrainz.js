@@ -3,7 +3,7 @@ var models, views;
 
 var MB = {};
 
-var alwaysChange = false;
+var alwaysChange = true;
 
 exports.init = init;
 function init() 
@@ -44,11 +44,11 @@ function songkick_callback(data)
         event = data.resultsPage.results.event[0];
         artist = event.performance[0].artist.displayName;
         date = event.start.date;
-        location = event.location.city;
+        loc = event.location.city;
         venue = event.venue.displayName;
-        $("#songkick").html(artist + "<br/>" + date + "<br/>" + location + "<br/>" + venue);
+        $("#songkick").html(artist + "<br/>" + date + "<br/>" + loc + "<br/>" + venue);
     } else {
-        $("#songkick").html("No upcoming concerts. Fuss!");
+        $("#songkick").html("No upcoming concerts.");
     }
 }
 
