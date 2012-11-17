@@ -50,8 +50,19 @@ function eventchange()
 function aftereventchange() {
     if (MB.mbData.loaded) {
         songkick(MB.mbData.artistId);
+        getArtistRels();
+        setTimeout(afterArtistRels, 50);
     } else {
         setTimeout(aftereventchange, 50);
+    }
+}
+
+function afterArtistRels() 
+{
+    if (MB.mbData.artistRelsLoaded) {
+        console.log(MB.mbData.artistRels);
+    } else {
+        setTimeout(afterArtistRels, 50);
     }
 }
 
@@ -71,4 +82,17 @@ function getMBData()
             }, 
             dataType: 'xml'});
     return mbData;
+}
+
+function getArtistRels()
+{
+    var rels = {};
+    $.ajax({url: 'http://musicbrainz.org/ws/2/artist/' + MB.mbData.artistId,
+            data: {fmt: 'xml',
+                   inc: 'url-rels'},
+            dataType: 'xml',
+            success: function(data) {
+                MB.mbData.artistRels = $(data);
+                MB.mbData.artistRelsLoaded = true;
+            }});
 }
