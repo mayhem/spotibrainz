@@ -3,7 +3,8 @@ var models, views;
 
 var MB = {};
 
-var alwaysChange = true;
+var alwaysChange = false;
+//var alwaysChange = true;
 
 exports.init = init;
 function init() 
@@ -30,6 +31,7 @@ function resize_window()
 
     $("#top-row").css("height", row_height);
     $("#bottom-row").css("height", row_height);
+    $('.boxy-content').css("height", row_height - 97);
 }
 
 function set_title(title)
@@ -71,7 +73,7 @@ function musixmatch_callback(data)
         text = text.replace(/\n/g, "<br/>");
         text = text.replace("\r", "");
         text += "<br/><br/>" + data.message.body.lyrics.lyrics_copyright + " ";
-        text += '<img src="' + data.message.body.lyrics.pixel_tracking_url + '">';
+        text += '<img style="display:none" src="' + data.message.body.lyrics.pixel_tracking_url + '">';
         $("#musixmatch").html(text);
     }
     else
@@ -108,7 +110,7 @@ function wikipedia(pageUrl)
     if (pageUrl) {
         urlBase = pageUrl.replace(/(http:\/\/[^.]+.wikipedia.org)\/.*/, "$1");
         urlPageTitle = pageUrl.replace(/http:\/\/[^.]+.wikipedia.org\/wiki\/(.*)/, "$1");
-        var link = $('<small><a href="' + pageUrl + '">' + urlPageTitle + '</a></small>');
+        var link = $('<small><a href="' + pageUrl + '">' + decodeURIComponent(urlPageTitle) + '</a></small>');
         $('#wp-header').html(link).prepend('Wikipedia ');
         url = urlBase + "/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + urlPageTitle
         $.ajax({url : url, success : wikipedia_callback, dataType: 'json'});
@@ -201,6 +203,9 @@ function afterGetData() {
         if (alwaysChange || !MB.mbDataOld || MB.mbDataOld.artistId != MB.mbData.artistId) {
             changedArtist();
         }
+        if (alwaysChange || !MB.mbDataOld || MB.mbDataOld.recordingId != MB.mbData.recordingId) {
+            musixmatch(MB.mbData.recordingId);
+        }
     } else {
         setTimeout(afterGetData, 50);
     }
@@ -210,9 +215,8 @@ function changedArtist()
 {
     console.log("Artist has changed to " + MB.mbData.artistId);
     clearArtist();
-    set_title(MB.mbData.artistName + ": " + MB.mbData.recordingName);
+    set_title('<a href="http://musicbrainz.org/artist/' + MB.mbData.artistId + '">' + MB.mbData.artistName + '</a>: <a href="http://musicbrainz.org/recording/' + MB.mbData.recordingId +  '">' + MB.mbData.recordingName + '</a>');
     songkick(MB.mbData.artistId);
-    musixmatch(MB.mbData.recordingId);
     musicmetric(MB.mbData.artistId);
 
     getArtistRels();
