@@ -103,6 +103,24 @@ function twitter_callback(data)
     }
 }
 
+function wikipedia(pageUrl)
+{
+    if (pageUrl) {
+        urlBase = pageUrl.replace(/(http:\/\/[^.]+.wikipedia.org)\/.*/, "$1");
+        urlPageTitle = pageUrl.replace(/http:\/\/[^.]+.wikipedia.org\/wiki\/(.*)/, "$1");
+        var link = $('<small><a href="' + pageUrl + '">' + urlPageTitle + '</a></small>');
+        $('#wp-header').html(link).prepend('Wikipedia ');
+        url = urlBase + "/w/api.php?action=query&prop=extracts&exintro=1&format=json&titles=" + urlPageTitle
+        $.ajax({url : url, success : wikipedia_callback, dataType: 'json'});
+    }
+}
+
+function wikipedia_callback(data)
+{
+     console.log(data);
+     $('#wikipedia').html(data.query.pages[Object.keys(data.query.pages)[0]].extract);
+}
+
 function clearIfSpotifyIDChanged()
 {
     var trackData = models.player.track.data;
@@ -128,6 +146,8 @@ function clearArtist()
     $("#songkick").html("");
     $("#twitter").html("");
     $("#twitter-header").html("Tweets");
+    $("#wikipedia").html("");
+    $("#wp-header").html("Wikipedia");
 }
 
 function clearTrack()
@@ -170,6 +190,7 @@ function afterArtistRels()
 {
     if (MB.mbData.artistRelsLoaded) {
         twitter(extractTwitterUsername());
+        wikipedia(extractWikipediaPage());
     } else {
         setTimeout(afterArtistRels, 50);
     }
@@ -186,6 +207,18 @@ function extractTwitterUsername()
         }
     });
     return username;
+}
+
+function extractWikipediaPage()
+{
+    var pageName;
+    var candidates = MB.mbData.artistRels.find('relation-list[target-type="url"]').find('relation[type="wikipedia"]').find('target');
+    candidates.each(function() {
+        if ($(this).text().match(/en.wikipedia.org/)) {
+            pageName = $(this).text();
+        }
+    });
+    return pageName;
 }
 
 function getMBData()
