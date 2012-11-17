@@ -75,11 +75,16 @@ body
     font-weight:   bold;
 }
 
-#musicmetric table
+#musicmetric-pop table
 {
     margin-left:    10px;
     border-spacing: 10px 0px;
     border-collapse: separate;
+}
+
+#musicmetric-geo ul
+{
+    list-style-type: none;
 }
 
 #songkick

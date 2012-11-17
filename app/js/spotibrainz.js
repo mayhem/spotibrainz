@@ -124,15 +124,20 @@ function wikipedia_callback(data)
 
 function musicmetric(mbid)
 {
+    // Popularity query
     url = "http://api.semetric.com/artist/musicbrainz:" + mbid + "/kpi?token=6f20a9a3dd4e49bba150ac59ef021b31";
-    $.ajax({url : url, success : musicmetric_callback, dataType : 'json' });
+    $.ajax({url : url, success : musicmetric_pop_callback, dataType : 'json' });
+
+    // Geography query
+    url = "http://api.semetric.com/artist/musicbrainz:" + mbid + "/downloads/bittorrent/location/city?token=6f20a9a3dd4e49bba150ac59ef021b31";
+    $.ajax({url : url, success : musicmetric_geo_callback, dataType : 'json' });
 }
 
 function commas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-function musicmetric_callback(data)
+function musicmetric_pop_callback(data)
 {
     console.log(data);
     if (data && data.response) {
@@ -148,9 +153,27 @@ function musicmetric_callback(data)
         if (data.response.fans.lastfm)
             html += "<tr><td>Last.fm</td><td>" + commas(data.response.fans.lastfm.total) + "</td></tr>";
         html += "</table></div>";
-        $("#musicmetric").html(html);
+        $("#musicmetric-pop").html(html);
     } else {
-        $("#musicmetric").html("No metrics available. Ay caramba!");
+        $("#musicmetric-pop").html("No metrics available. Ay caramba!");
+    }
+}
+
+function musicmetric_geo_callback(data)
+{
+    console.log(data);
+    if (data && data.response) {
+        html = '<div class="boxy-heading">Locations:</div><ul>';
+        for(i = 0; i < Math.min(data.response.data.length, 5); i++)
+        {
+            html += "<li>" + data.response.data[i].city.name + ", " +
+                    data.response.data[i].city.region.country.name + "</li>";
+        }
+        html += "</ul></div>";
+        console.log(html);
+        $("#musicmetric-geo").html(html);
+    } else {
+        $("#musicmetric-geo").html("");
     }
 }
 
@@ -181,7 +204,8 @@ function clearArtist()
     $("#twitter-header").html("Tweets");
     $("#wikipedia").html("");
     $("#wp-header").html("Wikipedia");
-    $("#musicmetric").html("");
+    $("#musicmetric-pop").html("");
+    $("#musicmetric-geo").html("");
 }
 
 function clearTrack()
