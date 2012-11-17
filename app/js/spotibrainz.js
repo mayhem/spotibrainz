@@ -53,7 +53,7 @@ function songkick_callback(data)
         venue = event.venue.displayName;
         $("#songkick").html(artist + "<br/>" + date + "<br/>" + loc + "<br/>" + venue);
     } else {
-        $("#songkick").html("No upcoming concerts.");
+        $("#songkick").html("No upcoming concerts. Fuss.");
     }
 }
 
