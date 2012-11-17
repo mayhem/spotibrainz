@@ -94,17 +94,7 @@ a
     border-collapse: separate;
 }
 
-#songkick
-{
-    overflow-y: hidden;
-}
-
-#twitter
-{
-    overflow-y: hidden;
-}
-
-#musicmetric
+#songkick, #twitter, #musicmetric, #youtube
 {
     overflow-y: hidden;
 }
