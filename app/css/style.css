@@ -2,14 +2,24 @@
 {
     border-radius: 5px;
     background-color: #ccc;
-    padding: 2px;
+    padding: 10px;
     margin-bottom: 5px;
     height: 99%;
-};
+}
+
+.boxy-header
+{
+    margin-top:    5px;
+    margin-bottom: 40px;
+    font-size:     15pt;
+    font-weight:   bold;
+}
+
+.boxy-logo
+{
+    float: right;
+}
 
 #songkick
 {
-    background-color: red;
-    background-image: url('img/songkick.png');
-    background-repeat: no-repeat;
-};
+}

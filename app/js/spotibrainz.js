@@ -38,9 +38,13 @@ function songkick(mbid)
 function songkick_callback(data)
 {
     if (data.resultsPage.totalEntries) {
-        $("#songkick").html(data.resultsPage.results.event[0].displayName);
+        event = data.resultsPage.results.event[0];
+        artist = event.performance[0].artist.displayName;
+        date = event.start.date;
+        location = event.location.city;
+        venue = event.venue.displayName;
+        $("#songkick").html(artist + "<br/>" + date + "<br/>" + location + "<br/>" + venue);
     } else {
-        console.log("no data!");
         $("#songkick").html("No upcoming concerts. Fuss!");
     }
 }
