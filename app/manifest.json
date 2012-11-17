@@ -13,6 +13,7 @@
 		"en"
 	],
         "RequiredPermissions": [
-                "http://musicbrainz.org"
+                "http://musicbrainz.org",
+                "http://api.songkick.com"
         ]
 }

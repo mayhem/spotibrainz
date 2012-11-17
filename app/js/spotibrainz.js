@@ -26,24 +26,23 @@ function resize_window()
     $("#bottom-row").css("height", row_height);
 }
 
-function songkick()
+function songkick(mbid)
 {
-    console.log("songkick!");
-    mbid = "8f6bd1e4-fbe1-4f50-aa9b-94c450ec0f11";
-    url = "http://api.songkick.com/api/3.0/artists/mbid:" + mbid + "/calendar.json?apikey=musichackday";
+    url = "http://api.songkick.com/api/3.0/artists/mbid:" + mbid + "/calendar.json?apikey=hackday";
     $.ajax({url : url, success : songkick_callback });
 }
 
 function songkick_callback(data)
 {
-    $("#songkick").text(data);
+    console.log(data.resultsPage.results.event[0].displayName);
+    $("#songkick").text(data.resultsPage.results.event[0].displayName);
 }
 
 function eventchange()
 {
     var mbData = getMBData();
 
-    console.log(mbData);
+    songkick(mbData.artistId);
 }
 
 function getMBData()
