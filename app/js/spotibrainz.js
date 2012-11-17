@@ -157,6 +157,7 @@ function musicmetric_callback(data)
 
 function clearIfSpotifyIDChanged()
 {
+    $(window).trigger('resize');
     var trackData = models.player.track.data;
 
     set_title("");
