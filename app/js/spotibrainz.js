@@ -3,6 +3,8 @@ var models, views;
 
 var MB = {};
 
+var alwaysChange = false;
+
 exports.init = init;
 function init() 
 {
@@ -48,15 +50,15 @@ function songkick_callback(data)
 function clearIfSpotifyIDChanged()
 {
     var trackData = models.player.track.data;
-    if (!MB.prevTrack || MB.prevTrack.uri != trackData.uri) {
+    if (alwaysChange || !MB.prevTrack || MB.prevTrack.uri != trackData.uri) {
         console.log("Track has changed to " + trackData.uri);
         clearTrack();
     }
-    if (!MB.prevTrack || MB.prevTrack.album.uri != trackData.album.uri) {
+    if (alwaysChange || !MB.prevTrack || MB.prevTrack.album.uri != trackData.album.uri) {
         console.log("Album has changed to " + trackData.album.uri);
         clearAlbum();
     }
-    if (!MB.prevTrack || MB.prevTrack.album.artist.uri != trackData.album.artist.uri) {
+    if (alwaysChange || !MB.prevTrack || MB.prevTrack.album.artist.uri != trackData.album.artist.uri) {
         console.log("Artist has changed to " + trackData.album.artist.uri);
         clearArtist();
     }
@@ -81,7 +83,7 @@ function eventChange()
 
 function afterGetData() {
     if (MB.mbData && MB.mbData.loaded) {
-        if (!MB.mbDataOld || MB.mbDataOld.artistId != MB.mbData.artistId) {
+        if (alwaysChange || !MB.mbDataOld || MB.mbDataOld.artistId != MB.mbData.artistId) {
             changedArtist();
         }
     } else {
