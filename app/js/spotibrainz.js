@@ -180,7 +180,6 @@ function musicmetric_geo_callback(data)
 
 function clearIfSpotifyIDChanged()
 {
-    $(window).trigger('resize');
     var trackData = models.player.track.data;
 
     set_title("");
@@ -219,6 +218,7 @@ function clearAlbum() {}
 
 function eventChange()
 {
+    $(window).trigger('resize');
     clearIfSpotifyIDChanged();
     getMBData();
     setTimeout(afterGetData, 50);
