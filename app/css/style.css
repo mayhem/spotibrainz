@@ -103,3 +103,9 @@ a
 {
     overflow-y: hidden;
 }
+
+#musixmatch span.active {
+    font-weight: bold;
+}
+
+#musixmatch { position: relative; }
