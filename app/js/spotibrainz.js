@@ -74,6 +74,47 @@ function songkick_callback(data)
     }
 }
 
+function musixmatch_matched(track, artist)
+{
+    url = "http://api.musixmatch.com/ws/1.1/matcher.subtitle.get?apikey=989c3cfacabf2ed3254ed055544cacc9&q_track=" + encodeURIComponent(track)  + "&q_artist=" + encodeURIComponent(artist) + "&f_subtitle_length=200&f_subtitle_length_max_deviation=3";
+    $.ajax({url : url, success : musixmatch_match_callback, dataType : "json" });
+}
+
+function musixmatch_match_callback(data) {
+    if (data.message.header.status_code != 200) { console.log("no mxm matched lyrics"); MB.mxm_matched = "none"; }
+    else { 
+        MB.mxm_matched = "match";
+        text = data.message.body.subtitle.subtitle_body;
+        text = text.split(/\n/);
+        $.each(text, function(itx,item) {
+            var time = unparse_mxmtime(item.replace(/\s*(\[.+\]).*/, "$1"));
+            var lyrics = item.replace(/\s*\[.+\]\s+(.*)/, "$1");
+            $("#musixmatch").append('<span data-time="' + time + '">' + lyrics + '</span><br />');
+        });
+        setTimeout(update_mxm_matched, 100);
+    }
+}
+
+function unparse_mxmtime(time) {
+    time = time.replace(/\s*\[?(\d+:\d+\.\d+)\]?\s*/, "$1");
+    min = parseInt(time.replace(/(\d+):\d+\.\d+/, "$1"));
+    sec = parseInt(time.replace(/\d+:(\d+)\.\d+/, "$1"));
+    ms = parseInt(time.replace(/\d+:\d+\.(\d+)/, "$1"));
+    return (min * 60 * 1000) + (sec * 1000) + ms;
+}
+
+function update_mxm_matched()
+{
+    var $par = $('#musixmatch');
+    var lines = $par.find('span').filter(function() { return $(this).attr('data-time') <= models.player.position });
+    lines.removeClass('active');
+    if (lines.last().position()) {
+        lines.last().addClass('active');
+        $par.scrollTop($par.scrollTop() + lines.last().position().top - $par.height()/2 + lines.last().height()/2);
+    }
+    setTimeout(update_mxm_matched, 100);
+}
+
 function musixmatch(mbid)
 {
     url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_mbid=" + mbid + "&apikey=989c3cfacabf2ed3254ed055544cacc9";
@@ -82,17 +123,20 @@ function musixmatch(mbid)
 
 function musixmatch_callback(data)
 {
-    if (data && data.message.body.lyrics && data.message.body.lyrics.lyrics_body != '')
-    {
-        text = data.message.body.lyrics.lyrics_body;
-        text = text.replace(/\n/g, "<br/>");
-        text = text.replace("\r", "");
-        text += "<br/><br/>" + data.message.body.lyrics.lyrics_copyright + " ";
-        text += '<img style="display:none" src="' + data.message.body.lyrics.pixel_tracking_url + '">';
-        $("#musixmatch").html(text);
-    }
-    else
-        $("#musixmatch").html("No lyrics available. Bummer.");
+    if (MB.mxm_matched == "none") {
+        if (data && data.message.body.lyrics && data.message.body.lyrics.lyrics_body != '')
+        {
+            text = data.message.body.lyrics.lyrics_body;
+            text = text.replace(/\n/g, "<br/>");
+            text = text.replace("\r", "");
+            text += "<br/><br/>" + data.message.body.lyrics.lyrics_copyright + " ";
+            text += '<img style="display:none" src="' + data.message.body.lyrics.pixel_tracking_url + '">';
+            $("#musixmatch").html(text);
+        }
+        else
+            $("#musixmatch").html("No lyrics available. Bummer.");
+    } else if (MB.mxm_matched == "unmatched") { console.log("ack, MXM calls in the wrong order") 
+    } else { console.log("already got matched-time lyrics") }
 }
 
 function twitter(username)
@@ -257,6 +301,9 @@ function eventChange()
 {
     $(window).trigger('resize');
     clearIfSpotifyIDChanged();
+    var trackData = models.player.track.data;
+    MB.mxm_matched = "unchecked";
+    musixmatch_matched(trackData.name, trackData.album.artist.name);
     getMBData();
     setTimeout(afterGetData, 50);
 }
