@@ -318,6 +318,7 @@ function eventChange()
 
 function afterGetData() {
     if (MB.mbData && MB.mbData.loaded) {
+        set_title('<a href="http://musicbrainz.org/artist/' + MB.mbData.artistId + '">' + MB.mbData.artistName + '</a>: <a href="http://musicbrainz.org/recording/' + MB.mbData.recordingId +  '">' + MB.mbData.recordingName + '</a>');
         if (alwaysChange || !MB.mbDataOld || MB.mbDataOld.artistId != MB.mbData.artistId) {
             changedArtist();
         }
@@ -334,7 +335,6 @@ function changedArtist()
 {
     console.log("Artist has changed to " + MB.mbData.artistId);
     clearArtist();
-    set_title('<a href="http://musicbrainz.org/artist/' + MB.mbData.artistId + '">' + MB.mbData.artistName + '</a>: <a href="http://musicbrainz.org/recording/' + MB.mbData.recordingId +  '">' + MB.mbData.recordingName + '</a>');
     songkick(MB.mbData.artistId);
     musicmetric(MB.mbData.artistId);
 
