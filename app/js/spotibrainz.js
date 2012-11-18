@@ -253,7 +253,12 @@ function youtube_callback(data)
 {
     console.log(data);
     if (data) {
-        $("#youtube").html("");
+        var ul = $('<ul />');
+        var videos = $(data).find('entry')
+            .each(function() {
+                ul.append('<li><a href="' + $(this).find('link[rel="alternate"]').attr('href') + '">' + $(this).find('title').text() + '</a></li>')
+            });
+        $("#youtube").html(ul);
     } else {
         $("#youtube").html("No videos found. Curses!");
     }
