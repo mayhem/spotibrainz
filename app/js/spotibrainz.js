@@ -47,7 +47,6 @@ function songkick(mbid)
 
 function songkick_callback(data)
 {
-    console.log(data);
     if (data.resultsPage.totalEntries) {
         html = ""
         for(i = 0; i < Math.min(data.resultsPage.results.event.length, 5); i++)
@@ -194,6 +193,27 @@ function musicmetric_geo_callback(data)
     }
 }
 
+function youtube(user)
+{
+    if (!user)
+    {
+        $("#youtube").html("No videos found. Curses!");
+        return;
+    }
+    url = 'https://gdata.youtube.com/feeds/api/users/' + user + '/uploads';
+    console.log(url);
+    $.ajax({url : url, success : youtube_callback, dataType : 'xml' });
+}
+
+function youtube_callback(data)
+{
+    if (data) {
+        $("#youtube").html("");
+    } else {
+        $("#youtube").html("No videos found. Curses!");
+    }
+}
+
 function clearIfSpotifyIDChanged()
 {
     var trackData = models.player.track.data;
@@ -223,6 +243,7 @@ function clearArtist()
     $("#wp-header").html("Wikipedia");
     $("#musicmetric-pop").html("");
     $("#musicmetric-geo").html("");
+    $("#youtube").html("");
 }
 
 function clearTrack()
@@ -271,6 +292,7 @@ function afterArtistRels()
     if (MB.mbData.artistRelsLoaded) {
         twitter(extractTwitterUsername());
         wikipedia(extractWikipediaPage());
+        youtube(extractYoutubeUsername());
     } else {
         setTimeout(afterArtistRels, 50);
     }
@@ -299,6 +321,21 @@ function extractWikipediaPage()
         }
     });
     return pageName;
+}
+
+function extractYoutubeUsername()
+{
+    var username;
+    var candidates = MB.mbData.artistRels.find('relation-list[target-type="url"]').find('relation[type="youtube"]').find('target');
+    candidates.each(function() {
+        console.log("candidate: " + $(this).text());
+        if ($(this).text().match(/youtube.com/)) {
+            username = $(this).text();
+            username = username.replace(/http:\/\/youtube.com\//, "");
+        }
+    });
+    console.log(username);
+    return username;
 }
 
 function getMBData()
