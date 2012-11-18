@@ -114,6 +114,14 @@ a
     list-style-type: none;
 }
 
+#musixmatch span.active {
+    font-weight: bold;
+}
+
+#musixmatch {
+    position: relative;
+}
+
 #twitter, #musicmetric
 {
     overflow-y: hidden;
