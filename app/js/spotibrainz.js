@@ -256,7 +256,7 @@ function youtube_callback(data)
         var ul = $('<ul />');
         var videos = $(data).find('entry')
             .each(function() {
-                ul.append('<li><a href="' + $(this).find('link[rel="alternate"]').attr('href') + '">' + $(this).find('title').text() + '</a></li>')
+                ul.append('<li><a href="' + $(this).find('link[rel="alternate"]').attr('href') + '">' + $(this).children('title').text() + '</a></li>')
             });
         $("#youtube").html(ul);
     } else {
