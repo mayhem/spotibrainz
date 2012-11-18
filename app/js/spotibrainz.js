@@ -238,6 +238,8 @@ function musicmetric_geo_callback(data)
 
 function youtube(user)
 {
+    var link = $('<small><a href="https://youtube.com/user/' + user + '">' + user + '</a></small>');
+    $('#youtube-header').html(link).prepend('Videos ');
     if (!user)
     {
         $("#youtube").html("No videos found. Curses!");
@@ -293,6 +295,7 @@ function clearArtist()
     $("#musicmetric-pop").html("");
     $("#musicmetric-geo").html("");
     $("#youtube").html("");
+    $("#youtube-header").html("Videos");
 }
 
 function clearTrack()
