@@ -21,6 +21,7 @@ body
     padding-top: 5px;
     line-height: 28px;
     float: left;
+    font-weight: bold;
 }
 
 #title-bar a
@@ -65,7 +66,6 @@ a
 {
     margin-top:    5px;
     height: 64px;
-    /* margin-bottom: 40px; */
     font-size:     15pt;
     font-weight:   bold;
 }
@@ -74,7 +74,6 @@ a
 {
     overflow-y:      scroll;
     overflow-x:      hidden;
-/*    text-overflow: ellipsis; */
 }
 
 .boxy-logo
@@ -87,6 +86,11 @@ a
     font-weight:   bold;
 }
 
+.boxy-heading-small
+{
+    font-size: 10pt;
+}
+
 #musicmetric-pop table
 {
     margin-left:    10px;
@@ -94,12 +98,13 @@ a
     border-collapse: separate;
 }
 
+#songkick ul,
 #musicmetric-geo ul
 {
     list-style-type: none;
 }
 
-#songkick, #twitter, #musicmetric, #youtube
+#twitter, #musicmetric, #youtube
 {
     overflow-y: hidden;
 }

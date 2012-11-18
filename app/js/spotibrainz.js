@@ -47,13 +47,29 @@ function songkick(mbid)
 
 function songkick_callback(data)
 {
+    console.log(data);
     if (data.resultsPage.totalEntries) {
-        event = data.resultsPage.results.event[0];
-        artist = event.performance[0].artist.displayName;
-        date = event.start.date;
-        loc = event.location.city;
-        venue = event.venue.displayName;
-        $("#songkick").html(artist + "<br/>" + date + "<br/>" + loc + "<br/>" + venue);
+        html = ""
+        for(i = 0; i < Math.min(data.resultsPage.results.event.length, 5); i++)
+        {
+            event = data.resultsPage.results.event[i];
+            artists = [];
+            for(j = 0; j < event.performance.length; j++)
+            {
+                 perf = event.performance[j];
+                 if (perf.billing == 'headline')
+                     artists.push(perf.artist.displayName);
+            }
+            html += '<span class="boxy-heading">';
+            html +=     '<a href="' + event.uri + '">' + event.location.city + '</a>';
+            html += '</span>';
+            html += '<ul>';
+            html += '<li>' + artists.join(", ") + '</li>';
+            html += '<li>' + event.venue.displayName + '</li>';
+            html += '<li>' + String(event.start.date) + "</li>";
+            html += '</ul>';
+        }
+        $("#songkick").html(html);
     } else {
         $("#songkick").html("No upcoming concerts. Fuss.");
     }
@@ -118,7 +134,7 @@ function musixmatch_callback(data)
             $("#musixmatch").html(text);
         }
         else
-            $("#musixmatch").html("No lyrics available");
+            $("#musixmatch").html("No lyrics available. Bummer.");
     } else if (MB.mxm_matched == "unmatched") { console.log("ack, MXM calls in the wrong order") 
     } else { console.log("already got matched-time lyrics") }
 }
@@ -196,6 +212,8 @@ function musicmetric_pop_callback(data)
             html += "<tr><td>YouTube</td><td>" + commas(data.response.fans.youtube.total) + "</td></tr>";
         if (data.response.fans.lastfm)
             html += "<tr><td>Last.fm</td><td>" + commas(data.response.fans.lastfm.total) + "</td></tr>";
+        if (data.response.fans.myspace)
+            html += "<tr><td>MySpace</td><td>" + commas(data.response.fans.myspace.total) + "</td></tr>";
         html += "</table></div>";
         $("#musicmetric-pop").html(html);
     } else {
@@ -206,7 +224,7 @@ function musicmetric_pop_callback(data)
 function musicmetric_geo_callback(data)
 {
     if (data && data.response) {
-        html = '<div class="boxy-heading">Locations:</div><ul>';
+        html = '<div class="boxy-heading">Top fan locations:</div><ul>';
         for(i = 0; i < Math.min(data.response.data.length, 5); i++)
         {
             html += "<li>" + data.response.data[i].city.name + ", " +
