@@ -93,7 +93,7 @@ function musixmatch_callback(data)
         $("#musixmatch").html(text);
     }
     else
-        $("#musixmatch").html("No lyrics available");
+        $("#musixmatch").html("No lyrics available. Bummer.");
 }
 
 function twitter(username)
