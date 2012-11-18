@@ -87,6 +87,11 @@ a
     font-weight:   bold;
 }
 
+.boxy-heading-small
+{
+    font-size: 10pt;
+}
+
 #musicmetric-pop table
 {
     margin-left:    10px;
@@ -94,13 +99,13 @@ a
     border-collapse: separate;
 }
 
-<<<<<<< HEAD
+#songkick ul,
 #musicmetric-geo ul
 {
     list-style-type: none;
 }
 
-#songkick, #twitter, #musicmetric, #youtube
+#twitter, #musicmetric, #youtube
 {
     overflow-y: hidden;
 }
