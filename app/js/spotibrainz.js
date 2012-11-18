@@ -106,8 +106,7 @@ function unparse_mxmtime(time) {
 function update_mxm_matched()
 {
     var $par = $('#musixmatch');
-    var lines = $par.find('span').filter(function() { return $(this).attr('data-time') <= models.player.position });
-    lines.removeClass('active');
+    var lines = $par.find('span').removeClass('active').filter(function() { return $(this).attr('data-time') <= models.player.position });
     if (lines.last().position()) {
         lines.last().addClass('active');
         $par.scrollTop($par.scrollTop() + lines.last().position().top - $par.height()/2 + lines.last().height()/2);
