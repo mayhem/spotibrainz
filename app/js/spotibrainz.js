@@ -251,6 +251,7 @@ function youtube(user)
 
 function youtube_callback(data)
 {
+    console.log(data);
     if (data) {
         $("#youtube").html("");
     } else {
@@ -375,13 +376,14 @@ function extractYoutubeUsername()
     var username;
     var candidates = MB.mbData.artistRels.find('relation-list[target-type="url"]').find('relation[type="youtube"]').find('target');
     candidates.each(function() {
-        console.log("candidate: " + $(this).text());
         if ($(this).text().match(/youtube.com/)) {
             username = $(this).text();
+            username = username.replace(/http:\/\/www.youtube.com\/user\//, "");
+            username = username.replace(/http:\/\/www.youtube.com\//, "");
+            username = username.replace(/http:\/\/youtube.com\/user\//, "");
             username = username.replace(/http:\/\/youtube.com\//, "");
         }
     });
-    console.log(username);
     return username;
 }
 

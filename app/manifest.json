@@ -19,6 +19,7 @@
                 "http://tracking.musixmatch.com",
                 "http://api.twitter.com",
                 "http://en.wikipedia.org",
-                "http://api.semetric.com"
+                "http://api.semetric.com",
+                "https://gdata.youtube.com"
         ]
 }
