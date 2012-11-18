@@ -126,6 +126,7 @@ a
 #musixmatch span.active {
     font-weight: bold;
     background-color: rgba(255, 0, 255, 0.25);
+    display: inline-block;
 }
 
 #musixmatch {
