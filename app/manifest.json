@@ -2,9 +2,9 @@
 	"BundleType": "Application",
 	"BundleIdentifier": "spotibrainz",
 	"AppIcon": {
-		"18x18": "img/huesound-18.png",
-		"64x64": "img/huesound-64.png",
-		"128x128": "img/huesound-128.png"
+		"18x18": "img/musicbrainz-icon-18.png",
+		"64x64": "img/musicbrainz-icon-64.png",
+		"128x128": "img/musicbrainz-icon-128.png"
 	},
 	"AppName": {
 		"en": "SpotiBrainz"
