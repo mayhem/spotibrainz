@@ -47,7 +47,6 @@ function songkick(mbid)
 
 function songkick_callback(data)
 {
-    console.log(data);
     if (data.resultsPage.totalEntries) {
         html = ""
         for(i = 0; i < Math.min(data.resultsPage.results.event.length, 5); i++)
@@ -92,7 +91,6 @@ function musixmatch_match_callback(data) {
             var lyrics = item.replace(/\s*\[.+\]\s+(.*)/, "$1");
             $("#musixmatch").append('<span data-time="' + time + '">' + lyrics + '</span><br />');
         });
-        console.log(models.player.position);
         setTimeout(update_mxm_matched, 100);
     }
 }
@@ -110,8 +108,10 @@ function update_mxm_matched()
     var $par = $('#musixmatch');
     var lines = $par.find('span').filter(function() { return $(this).attr('data-time') <= models.player.position });
     lines.removeClass('active');
-    lines.last().addClass('active');
-    $par.scrollTop($par.scrollTop() + lines.last().position().top - $par.height()/2 + lines.last().height()/2);
+    if (lines.last().position()) {
+        lines.last().addClass('active');
+        $par.scrollTop($par.scrollTop() + lines.last().position().top - $par.height()/2 + lines.last().height()/2);
+    }
     setTimeout(update_mxm_matched, 100);
 }
 
