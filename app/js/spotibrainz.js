@@ -141,7 +141,7 @@ function musixmatch_callback(data)
 function twitter(username)
 {
     if (username) {
-        url = 'http://api.twitter.com/1/statuses/user_timeline.json?exclude_replies=true&count=3&screen_name=' + username;
+        url = 'http://api.twitter.com/1/statuses/user_timeline.json?exclude_replies=true&count=10&screen_name=' + username;
         $.ajax({url : url, success : twitter_callback });
     } else {
         $('#twitter').html('No twitter feed. Bollocks!');
